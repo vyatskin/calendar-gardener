@@ -2,607 +2,464 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Посівний">
 <title>Посівний Календар 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --earth: #F5EFE4;
-    --bark: #4A2C17;
-    --moss: #4A6741;
-    --sage: #5a8055;
-    --wheat: #9a6e2a;
-    --cream: #2C1810;
-    --parchment: #EDE0C4;
-    --sky: #87AABF;
-    --sun: #c8860a;
-    --leaf: #5E8B5A;
-    --sprout: #3a7a36;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FDFAF5;
+  --card: #FFFFFF;
+  --border: #E8DFC8;
+  --text: #2A1F0E;
+  --text-soft: #7A6A50;
+  --green-dark: #2E7D32;
+  --green-mid: #66BB6A;
+  --green-light: #E8F5E9;
+  --green-light2: #F1FAF1;
+  --red-dark: #C62828;
+  --red-light: #FFEBEE;
+  --gold: #8B6914;
+  --gold-light: #FFF8E7;
+  --neutral: #F5F0E8;
+  --today-ring: #F57C00;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
 
-  body {
-    background-color: var(--earth);
-    color: var(--cream);
-    font-family: 'Crimson Pro', Georgia, serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
 
-  /* Texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.4;
-  }
+/* ── HEADER ── */
+header {
+  background: var(--green-dark);
+  color: white;
+  text-align: center;
+  padding: 28px 20px 24px;
+  border-radius: 0 0 28px 28px;
+  box-shadow: 0 4px 20px rgba(46,125,50,0.3);
+}
 
-  header {
-    text-align: center;
-    padding: 60px 20px 40px;
-    position: relative;
-    border-bottom: 1px solid rgba(154,110,42,0.25);
-    overflow: hidden;
-  }
+header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
 
-  header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(ellipse, rgba(154,110,42,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+header .subtitle {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
 
-  .header-label {
-    font-family: 'Crimson Pro', serif;
-    font-weight: 300;
-    letter-spacing: 0.4em;
-    font-size: 0.75rem;
-    color: var(--wheat);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    animation: fadeUp 0.8s ease both;
-  }
+/* ── MONTH NAV ── */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 8px;
+  gap: 8px;
+}
 
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 8vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    color: var(--cream);
-    animation: fadeUp 0.8s 0.1s ease both;
-  }
+.month-nav-btn {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
+}
+.month-nav-btn:active { transform: scale(0.93); background: var(--border); }
 
-  h1 em {
-    font-style: italic;
-    color: var(--wheat);
-  }
+.month-name-block {
+  text-align: center;
+  flex: 1;
+}
+.month-name-block .month-big {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  line-height: 1;
+}
+.month-name-block .month-sub {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
 
-  .header-year {
-    font-size: 1rem;
-    letter-spacing: 0.3em;
-    color: var(--sage);
-    margin-top: 12px;
-    animation: fadeUp 0.8s 0.2s ease both;
-  }
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+}
+.legend-dot {
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+}
+.ld-best  { background: var(--green-dark); }
+.ld-good  { background: var(--green-mid); }
+.ld-avoid { background: var(--red-dark); }
+.ld-neut  { background: #C8BDA8; }
 
-  .moon-phases {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 32px;
-    animation: fadeUp 0.8s 0.3s ease both;
-  }
+/* ── CALENDAR GRID ── */
+.cal-wrap {
+  padding: 0 12px;
+}
 
-  .moon-phase {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    color: rgba(44,24,16,0.45);
-    text-transform: uppercase;
-  }
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+.wd {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  padding: 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
 
-  .moon-phase span:first-child {
-    font-size: 1.6rem;
-    filter: drop-shadow(0 0 6px rgba(154,110,42,0.3));
-  }
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
 
-  .legend-bar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-    border-bottom: 1px solid rgba(154,110,42,0.15);
-    animation: fadeUp 0.8s 0.4s ease both;
-  }
+.day {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px 5px;
+  min-height: 58px;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  border: 2px solid transparent;
+  background: var(--neutral);
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.day:active { transform: scale(0.92); }
+.day.empty  { background: transparent; cursor: default; pointer-events: none; }
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-    color: rgba(44,24,16,0.65);
-  }
+.day.best  { background: var(--green-light);  border-color: var(--green-dark); }
+.day.good  { background: var(--green-light2); border-color: var(--green-mid); }
+.day.avoid { background: var(--red-light);    border-color: #EF9A9A; }
 
-  .legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+.day.today { box-shadow: 0 0 0 3px var(--today-ring); }
 
-  .dot-best { background: #3a7a36; box-shadow: 0 0 8px rgba(58,122,54,0.5); }
-  .dot-good { background: #5a8055; }
-  .dot-avoid { background: #a03030; }
-  .dot-neutral { background: rgba(44,24,16,0.12); border: 1px solid rgba(44,24,16,0.2); }
+.day-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+}
+.day.best  .day-num { color: var(--green-dark); }
+.day.good  .day-num { color: #388E3C; }
+.day.avoid .day-num { color: var(--red-dark); }
 
-  /* Month selector */
-  .month-nav {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    padding: 24px 20px 16px;
-    flex-wrap: wrap;
-  }
+.day-icons {
+  display: flex;
+  gap: 1px;
+  margin-top: 3px;
+  font-size: 0.72rem;
+  line-height: 1;
+}
 
-  .month-btn {
-    background: none;
-    border: 1px solid rgba(154,110,42,0.25);
-    color: rgba(44,24,16,0.5);
-    padding: 7px 14px;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: 'Crimson Pro', serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
-    transition: all 0.25s ease;
-  }
+.day-status {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: 2px;
+  line-height: 1;
+}
+.day.best  .day-status { color: var(--green-dark); }
+.day.good  .day-status { color: #388E3C); }
+.day.avoid .day-status { color: var(--red-dark); }
 
-  .month-btn:hover {
-    border-color: var(--wheat);
-    color: var(--wheat);
-    background: rgba(154,110,42,0.06);
-  }
+/* ── DAY DETAIL PANEL ── */
+.detail-panel {
+  margin: 14px 12px 0;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+  overflow: hidden;
+  display: none;
+}
+.detail-panel.visible { display: block; }
 
-  .month-btn.active {
-    background: var(--wheat);
-    border-color: var(--wheat);
-    color: #fff;
-    font-weight: 500;
-  }
+.detail-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-date {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.detail-status {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ds-best  { background: var(--green-light);  color: var(--green-dark); }
+.ds-good  { background: var(--green-light2); color: #388E3C; }
+.ds-avoid { background: var(--red-light);    color: var(--red-dark); }
+.ds-neut  { background: var(--neutral);      color: var(--text-soft); }
 
-  /* Calendar grid */
-  .calendar-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px 24px 60px;
-  }
+.detail-body {
+  padding: 14px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  .month-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: 10px;
+}
+.detail-row-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.detail-row-content {}
+.detail-row-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.detail-row-text {
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
 
-  .month-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-style: italic;
-    color: var(--wheat);
-    margin-bottom: 4px;
-  }
+/* ── CROPS SECTION ── */
+.crops-section {
+  margin: 18px 12px 0;
+}
+.crops-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  padding: 0 4px 10px;
+}
+.crops-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.crop-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+.crop-emoji {
+  font-size: 2.2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.crop-info {}
+.crop-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.crop-period {
+  font-size: 0.88rem;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.crop-tip {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  line-height: 1.4;
+}
 
-  .month-subtitle {
-    font-size: 0.85rem;
-    letter-spacing: 0.2em;
-    color: var(--sage);
-    text-transform: uppercase;
-  }
+/* ── CLOSE BUTTON ── */
+.close-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 10px 20px 0;
+  padding: 14px;
+  background: var(--neutral);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  cursor: pointer;
+  text-align: center;
+}
+.close-btn:active { background: var(--border); }
 
-  .weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-bottom: 4px;
-  }
+/* ── ZODIAC FILTER INFO ── */
+.zod-info {
+  margin: 0 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.zod-fire  { background: #FFF3E0; color: #E65100; border: 1px solid #FFCC80; }
+.zod-earth { background: #F9FBE7; color: #558B2F; border: 1px solid #DCE775; }
+.zod-air   { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+.zod-water { background: #E0F7FA; color: #006064; border: 1px solid #80DEEA; }
 
-  .weekday-label {
-    text-align: center;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(44,24,16,0.4);
-    padding: 8px;
-  }
-
-  .days-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-
-  .day-cell {
-    aspect-ratio: 1;
-    border-radius: 3px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    border: 1px solid transparent;
-    background: rgba(0,0,0,0.04);
-    min-height: 60px;
-  }
-
-  .day-cell:hover:not(.empty) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    z-index: 10;
-    border-color: rgba(154,110,42,0.35);
-  }
-
-  .day-cell.empty { cursor: default; background: transparent; }
-
-  .day-cell.best {
-    background: rgba(58,122,54,0.18);
-    border-color: rgba(58,122,54,0.4);
-  }
-  .day-cell.best::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 3px;
-    background: radial-gradient(ellipse at 50% 0%, rgba(58,122,54,0.12), transparent 70%);
-  }
-
-  .day-cell.good {
-    background: rgba(58,122,54,0.07);
-    border-color: rgba(58,122,54,0.2);
-  }
-
-  .day-cell.good .day-num { color: var(--sage); }
-  .day-cell.good .day-label { color: var(--sage); }
-
-  .day-cell.avoid {
-    background: rgba(160,48,48,0.1);
-    border-color: rgba(160,48,48,0.22);
-  }
-
-  .day-cell.today {
-    box-shadow: inset 0 0 0 2px var(--sun);
-  }
-
-  .day-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: rgba(44,24,16,0.75);
-    position: relative;
-    z-index: 1;
-  }
-
-  .day-cell.avoid .day-num { color: rgba(160,48,48,0.5); }
-  .day-cell.best .day-num { color: #2d6b29; }
-
-  .day-moon {
-    font-size: 0.75rem;
-    position: relative;
-    z-index: 1;
-    margin-top: 2px;
-  }
-
-  .day-zodiac {
-    font-size: 0.72rem;
-    position: relative;
-    z-index: 1;
-    line-height: 1;
-    opacity: 0.85;
-    margin-top: 1px;
-  }
-
-  .day-label {
-    font-size: 0.6rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 1;
-    margin-top: 2px;
-    color: rgba(44,24,16,0.3);
-  }
-
-  .day-cell.best .day-label { color: #2d6b29; }
-  .day-cell.good .day-label { color: var(--sage); }
-  .day-cell.avoid .day-label { color: rgba(160,48,48,0.55); }
-
-  /* Crop recommendations */
-  .crops-section {
-    margin-top: 48px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(154,110,42,0.15);
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-style: italic;
-    color: var(--wheat);
-    margin-bottom: 24px;
-    text-align: center;
-  }
-
-  .crops-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-  }
-
-  .crop-card {
-    background: rgba(0,0,0,0.03);
-    border: 1px solid rgba(154,110,42,0.18);
-    border-radius: 4px;
-    padding: 20px;
-    transition: all 0.25s ease;
-  }
-
-  .crop-card:hover {
-    background: rgba(154,110,42,0.06);
-    border-color: rgba(154,110,42,0.35);
-    transform: translateY(-2px);
-  }
-
-  .crop-icon { font-size: 2rem; margin-bottom: 10px; }
-
-  .crop-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--cream);
-    margin-bottom: 6px;
-  }
-
-  .crop-period {
-    font-size: 0.85rem;
-    color: var(--sage);
-    margin-bottom: 10px;
-    letter-spacing: 0.05em;
-  }
-
-  .crop-tip {
-    font-size: 0.82rem;
-    color: rgba(44,24,16,0.5);
-    line-height: 1.5;
-  }
-
-  /* Tooltip */
-  .tooltip {
-    position: fixed;
-    background: var(--bark);
-    border: 1px solid var(--wheat);
-    border-radius: 4px;
-    padding: 14px 18px;
-    font-size: 0.85rem;
-    color: var(--cream);
-    pointer-events: none;
-    z-index: 9999;
-    max-width: 260px;
-    display: none;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-  }
-
-  .tooltip-title {
-    font-family: 'Playfair Display', serif;
-    color: var(--wheat);
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-  }
-
-  .tooltip-info {
-    color: rgba(244,237,217,0.65);
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
-
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 30px;
-    font-size: 0.78rem;
-    color: rgba(44,24,16,0.25);
-    letter-spacing: 0.1em;
-    border-top: 1px solid rgba(154,110,42,0.15);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .calendar-container { animation: fadeUp 0.6s 0.5s ease both; }
-
-  @media (max-width: 600px) {
-    .day-cell { min-height: 45px; }
-    .day-num { font-size: 0.9rem; }
-    .day-moon { font-size: 0.6rem; }
-    .day-label { display: none; }
-    .crops-grid { grid-template-columns: 1fr; }
-  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-label">🌿 Садівника довідник</div>
-  <h1>Посівний<br><em>Календар</em></h1>
-  <div class="header-year">· 2026 ·</div>
-  <div class="moon-phases">
-    <div class="moon-phase"><span>🌑</span>новий місяць</div>
-    <div class="moon-phase"><span>🌓</span>перша чверть</div>
-    <div class="moon-phase"><span>🌕</span>повний місяць</div>
-    <div class="moon-phase"><span>🌗</span>остання чверть</div>
-  </div>
+  <h1>🌱 Посівний Календар</h1>
+  <div class="subtitle">2026 рік · За фазами місяця та зодіаком</div>
 </header>
 
-<div class="legend-bar">
-  <div class="legend-item"><div class="legend-dot dot-best"></div>Найкращі дні для посіву</div>
-  <div class="legend-item"><div class="legend-dot dot-good"></div>Сприятливі дні</div>
-  <div class="legend-item"><div class="legend-dot dot-avoid"></div>Небажані дні</div>
-  <div class="legend-item"><div class="legend-dot dot-neutral"></div>Нейтральні дні</div>
-</div>
-<div class="legend-bar" style="padding-top:10px; padding-bottom:14px; gap:16px;">
-  <div class="legend-item" style="font-size:0.78rem; color:rgba(44,24,16,0.35); letter-spacing:0.1em; text-transform:uppercase; width:100%; justify-content:center; margin-bottom:4px;">Знаки зодіаку місяця</div>
-  <div class="legend-item"><span style="color:#c0603a; font-size:1rem;">🔥</span>&nbsp;Вогонь — плоди</div>
-  <div class="legend-item"><span style="color:#8a7a4a; font-size:1rem;">🌍</span>&nbsp;Земля — коренеплоди</div>
-  <div class="legend-item"><span style="color:#6a9ab0; font-size:1rem;">💨</span>&nbsp;Повітря — квіти</div>
-  <div class="legend-item"><span style="color:#4a7a8a; font-size:1rem;">💧</span>&nbsp;Вода — листя</div>
-</div>
-
-<div style="text-align:center; padding: 8px 20px 0; font-size:0.8rem; color:rgba(44,24,16,0.3); letter-spacing:0.1em;">НАВЕДІТЬ НА ДЕНЬ ДЛЯ ДЕТАЛЕЙ</div>
-
-<div class="month-nav" id="monthNav"></div>
-
-<div class="calendar-container">
-  <div class="month-header">
-    <div class="month-title" id="monthTitle">Лютий</div>
-    <div class="month-subtitle" id="monthSubtitle">Підготовка до весни · Розсада</div>
+<div class="month-nav">
+  <button class="month-nav-btn" id="prevBtn" onclick="changeMonth(-1)">‹</button>
+  <div class="month-name-block">
+    <div class="month-big" id="monthName">Лютий</div>
+    <div class="month-sub" id="monthSub"></div>
   </div>
+  <button class="month-nav-btn" id="nextBtn" onclick="changeMonth(1)">›</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot ld-best"></div>Чудово</div>
+  <div class="legend-item"><div class="legend-dot ld-good"></div>Добре</div>
+  <div class="legend-item"><div class="legend-dot ld-avoid"></div>Не садити</div>
+  <div class="legend-item"><div class="legend-dot ld-neut"></div>Нейтрально</div>
+</div>
+
+<div class="cal-wrap">
   <div class="weekdays">
-    <div class="weekday-label">Пн</div>
-    <div class="weekday-label">Вт</div>
-    <div class="weekday-label">Ср</div>
-    <div class="weekday-label">Чт</div>
-    <div class="weekday-label">Пт</div>
-    <div class="weekday-label">Сб</div>
-    <div class="weekday-label">Нд</div>
+    <div class="wd">Пн</div><div class="wd">Вт</div><div class="wd">Ср</div>
+    <div class="wd">Чт</div><div class="wd">Пт</div>
+    <div class="wd" style="color:#C0392B">Сб</div>
+    <div class="wd" style="color:#C0392B">Нд</div>
   </div>
   <div class="days-grid" id="daysGrid"></div>
+</div>
 
-  <div class="crops-section">
-    <div class="section-title" id="cropsTitle">Що садити у лютому</div>
-    <div class="crops-grid" id="cropsGrid"></div>
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-header">
+    <div class="detail-date" id="detailDate"></div>
+    <div class="detail-status" id="detailStatus"></div>
   </div>
+  <div class="detail-body" id="detailBody"></div>
+  <button class="close-btn" onclick="closeDetail()">✕ Закрити</button>
+  <div style="height:16px"></div>
 </div>
 
-<div class="tooltip" id="tooltip">
-  <div class="tooltip-title" id="ttTitle"></div>
-  <div class="tooltip-info" id="ttMoon"></div>
-  <div class="tooltip-info" id="ttZodiac" style="margin-top:6px; font-size:0.85rem;"></div>
-  <div class="tooltip-info" id="ttZodiacTip" style="margin-top:4px; font-style:italic; color:rgba(244,237,217,0.5); font-size:0.78rem; line-height:1.4;"></div>
-  <div class="tooltip-info" id="ttInfo" style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(200,169,110,0.2);"></div>
+<div class="crops-section" id="cropsSection">
+  <div class="crops-title" id="cropsTitle"></div>
+  <div class="crops-list" id="cropsList"></div>
 </div>
-
-<footer>Посівний Календар · Складено за фазами місяця · 2026</footer>
 
 <script>
-// ─────────────────────────────────────────────────────────
-//  АЛГОРИТМ ФАЗИ МІСЯЦЯ (метод Конвея / астрономічна формула)
-//  Повертає число 0–29.53 — вік місяця в добах від новомісяччя
-// ─────────────────────────────────────────────────────────
+// ── MOON AGE ──
 function getMoonAge(date) {
-  // Відома дата новомісяччя: 6 січня 2000 18:14 UTC (Julian Day 2451549.5 + 0.759722)
   const KNOWN_NEW_MOON = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
-  const SYNODIC_MONTH = 29.530588853; // середній синодичний місяць у добах
-  const msPerDay = 1000 * 60 * 60 * 24;
-  const daysSince = (date - KNOWN_NEW_MOON) / msPerDay;
-  const age = ((daysSince % SYNODIC_MONTH) + SYNODIC_MONTH) % SYNODIC_MONTH;
-  return age;
+  const SYNODIC = 29.530588853;
+  const msPerDay = 86400000;
+  const days = (date - KNOWN_NEW_MOON) / msPerDay;
+  return ((days % SYNODIC) + SYNODIC) % SYNODIC;
 }
 
-// Повертає індекс фази 0–7 (8 рівних секцій по ~3.69 дні)
-function getMoonPhaseIndex(date) {
-  const age = getMoonAge(date);
-  return Math.floor(age / (29.530588853 / 8)) % 8;
-}
-
-// Повертає емодзі місяця для дати
 function getMoonEmoji(date) {
-  const emojis = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
-  return emojis[getMoonPhaseIndex(date)];
+  const age = getMoonAge(date);
+  const idx = Math.floor(age / (29.530588853 / 8)) % 8;
+  return ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][idx];
 }
 
-// ─────────────────────────────────────────────────────────
-//  ЗНАК ЗОДІАКУ МІСЯЦЯ (місяць проходить усі 12 знаків за ~27.3 дні)
-//  Використовуємо сидеричний місяць: 27.321661 доби
-//  Відома опорна точка: 1 січня 2000 00:00 UTC місяць був у ~81° екліптики
-//  (тобто у Близнятах, ~10° Близнят)
-//  Ми розраховуємо градус місяця на екліптиці та визначаємо знак.
-// ─────────────────────────────────────────────────────────
+// ── ZODIAC ──
 function getMoonZodiacIndex(date) {
-  // Опорна точка: Jan 1, 2000 00:00 UTC
-  // Довгота місяця на екліптиці ~218.316° (Козеріг 8°)
-  // Середня кутова швидкість: 360 / 27.321661 = 13.176396 °/день
   const EPOCH = new Date(Date.UTC(2000, 0, 1, 0, 0, 0));
-  const MOON_EPOCH_LON = 218.316; // градус довготи місяця на 1.1.2000
-  const MOON_SPEED = 360 / 27.321661; // градусів на добу
-  const msPerDay = 1000 * 60 * 60 * 24;
-  const daysSince = (date - EPOCH) / msPerDay;
-  const lon = ((MOON_EPOCH_LON + MOON_SPEED * daysSince) % 360 + 360) % 360;
-  return Math.floor(lon / 30); // 0=Овен, 1=Телець, ..., 11=Риби
+  const SPEED = 360 / 27.321661;
+  const days = (date - EPOCH) / 86400000;
+  const lon = ((218.316 + SPEED * days) % 360 + 360) % 360;
+  return Math.floor(lon / 30);
 }
 
-const ZODIAC_SIGNS = [
-  { name: 'Овен',       emoji: '♈', element: 'fire',  type: 'leaf',
-    quality: 2, tip: 'Плодовий знак 🔥 Відмінно для листяних та плодових культур. Гарний день для посіву зернових.' },
-  { name: 'Телець',     emoji: '♉', element: 'earth', type: 'root',
-    quality: 2, tip: 'Кореневий знак 🌍 Один з найкращих для коренеплодів, цибулі, картоплі. Добре для пересадки.' },
-  { name: 'Близнята',   emoji: '♊', element: 'air',   type: 'flower',
-    quality: 0, tip: 'Квітковий знак 💨 Слабкий для більшості культур. Підійде для квітів, зрізання трав.' },
-  { name: 'Рак',        emoji: '♋', element: 'water', type: 'leaf',
-    quality: 2, tip: 'Листовий знак 💧 Найкращий для листяних овочів, салатів, капусти. Добре для поливу.' },
-  { name: 'Лев',        emoji: '♌', element: 'fire',  type: 'fruit',
-    quality: 1, tip: 'Плодовий знак 🔥 Добре для плодових культур — томатів, перцю. Але сухо, треба поливати.' },
-  { name: 'Діва',       emoji: '♍', element: 'earth', type: 'root',
-    quality: 1, tip: 'Кореневий знак 🌍 Добре для коренеплодів. Хороший час для прополювання та компосту.' },
-  { name: 'Терези',     emoji: '♎', element: 'air',   type: 'flower',
-    quality: 1, tip: 'Квітковий знак 💨 Найкращий для квітів. Добре для декоративних рослин та зрізання.' },
-  { name: 'Скорпіон',  emoji: '♏', element: 'water', type: 'leaf',
-    quality: 2, tip: 'Листовий знак 💧 Дуже родючий! Один з найкращих для посіву будь-яких культур.' },
-  { name: 'Стрілець',  emoji: '♐', element: 'fire',  type: 'fruit',
-    quality: 0, tip: 'Плодовий знак 🔥 Слабкий для посіву. Найкраще — збирати врожай і заготовляти насіння.' },
-  { name: 'Козеріг',   emoji: '♑', element: 'earth', type: 'root',
-    quality: 2, tip: 'Кореневий знак 🌍 Відмінний для коренеплодів і цибулі. Хороший для обрізки дерев.' },
-  { name: 'Водолій',   emoji: '♒', element: 'air',   type: 'flower',
-    quality: 0, tip: 'Квітковий знак 💨 Найслабший для посіву. Краще відпочити або займатися ґрунтом.' },
-  { name: 'Риби',      emoji: '♓', element: 'water', type: 'leaf',
-    quality: 2, tip: 'Листовий знак 💧 Дуже родючий. Чудово для листяних, зелені та квітів. Обережно з гнилизною.' },
+const ZODIAC = [
+  { name:'Овен',      emoji:'♈', element:'fire',  q:2, good:'плодові, листові',    bad:'коренеплоди' },
+  { name:'Телець',    emoji:'♉', element:'earth', q:2, good:'коренеплоди, цибуля', bad:'листові' },
+  { name:'Близнята',  emoji:'♊', element:'air',   q:0, good:'квіти, трави',        bad:'більшість культур' },
+  { name:'Рак',       emoji:'♋', element:'water', q:2, good:'листові, салати',     bad:'коренеплоди' },
+  { name:'Лев',       emoji:'♌', element:'fire',  q:1, good:'плодові, зернові',    bad:'полив (сухо)' },
+  { name:'Діва',      emoji:'♍', element:'earth', q:1, good:'коренеплоди',         bad:'листові' },
+  { name:'Терези',    emoji:'♎', element:'air',   q:1, good:'квіти',              bad:'овочі' },
+  { name:'Скорпіон', emoji:'♏', element:'water', q:2, good:'всі культури',        bad:'нічого' },
+  { name:'Стрілець',  emoji:'♐', element:'fire',  q:0, good:'збір насіння',        bad:'посів' },
+  { name:'Козеріг',   emoji:'♑', element:'earth', q:2, good:'коренеплоди, обрізка',bad:'листові' },
+  { name:'Водолій',   emoji:'♒', element:'air',   q:0, good:'відпочинок саду',     bad:'майже все' },
+  { name:'Риби',      emoji:'♓', element:'water', q:2, good:'листові, квіти',      bad:'коренеплоди (гниль)' },
 ];
 
-const ELEMENT_COLORS = {
-  fire:  '#c0603a',
-  earth: '#8a7a4a',
-  air:   '#6a9ab0',
-  water: '#4a7a8a',
-};
+const ELEM_LABEL = { fire:'🔥 Вогонь', earth:'🌿 Земля', air:'💨 Повітря', water:'💧 Вода' };
+const ELEM_CLASS = { fire:'zod-fire', earth:'zod-earth', air:'zod-air', water:'zod-water' };
 
-// ─────────────────────────────────────────────────────────
-//  ПРАВИЛА ПОСІВНОГО КАЛЕНДАРЯ (за місячним землеробством)
-//
-//  Вік місяця (доби від новомісяччя) → тип дня:
-//
-//  0–1     : 3 (уникати — новомісяччя, нестабільна енергія)
-//  1–7     : 2 (найкращі — молодий зростаючий місяць)
-//            але день перед 1-ою чвертю (6.5–7.5) = 1 (перехід)
-//  7–7.5   : 1 (сприятливо — перша чверть)
-//  7.5–14  : 1 (добре — зростаючий місяць 2-га половина)
-//            пік 12–14 = 2 (найкраще перед повнолунням)
-//  14–15   : 3 (уникати — повнолуння, надмірна волога)
-//  15–22   : 0 (нейтрально — спадаючий місяць)
-//            але 20–22 = 1 (добре для коренеплодів)
-//  22–23   : 1 (остання чверть — добре для коренеплодів)
-//  23–28   : 0 (нейтрально / відпочинок саду)
-//  28–29.5 : 3 (уникати — старий місяць, перед новим)
-// ─────────────────────────────────────────────────────────
+// ── DAY TYPE ──
 function getMoonDayType(date) {
   const age = getMoonAge(date);
   if (age < 1.0)  return 3;
@@ -619,139 +476,129 @@ function getMoonDayType(date) {
   return 3;
 }
 
-// Комбінований тип: місяць + зодіак
-// Зодіак quality: 0=слабкий, 1=добре, 2=відмінно
-// Місяць type: 0=нейтр, 1=добре, 2=найкраще, 3=уникати
 function getDayType(date) {
   const moonType = getMoonDayType(date);
-  if (moonType === 3) return 3; // місяць каже уникати — уникаємо незалежно від зодіаку
-  const zodiac = ZODIAC_SIGNS[getMoonZodiacIndex(date)];
-  // Комбінуємо: середнє зважене, округляємо
-  const combined = (moonType + zodiac.quality) / 2;
+  if (moonType === 3) return 3;
+  const z = ZODIAC[getMoonZodiacIndex(date)];
+  const combined = (moonType + z.q) / 2;
   if (combined >= 1.75) return 2;
   if (combined >= 0.75) return 1;
-  if (combined < 0.3)   return 0;
   return 0;
 }
 
-// ─────────────────────────────────────────────────────────
-//  ДАНІ МІСЯЦІВ
-// ─────────────────────────────────────────────────────────
+// ── MONTHS DATA ──
 const MONTHS = [
-  { name: 'Січень',   subtitle: 'Планування сезону · Каталоги насіння', short: 'Січ',
-    crops: [
-      { icon: '🫑', name: 'Перець',       period: '15–31 січня',  tip: 'Сіяти розсаду вдома, 24–26°C для проростання' },
-      { icon: '🍅', name: 'Ранні томати', period: '20–31 січня',  tip: 'Тільки при наявності досвіду та підсвітки' },
-      { icon: '🌿', name: 'Селера',       period: '10–25 січня',  tip: 'Потребує 60–90 днів до висадки у ґрунт' },
-      { icon: '📋', name: 'Планування',  period: 'весь місяць',  tip: 'Ідеальний час для замовлення насіння та складання плану' },
-    ]},
-  { name: 'Лютий',   subtitle: 'Підготовка до весни · Розсада', short: 'Лют',
-    crops: [
-      { icon: '🫑', name: 'Перець',         period: '1–15 лютого',  tip: "Обов'язково підсвічування 16 год/день" },
-      { icon: '🍆', name: 'Баклажан',       period: '5–20 лютого',  tip: 'Повільно росте, сіяти раніше за томати' },
-      { icon: '🥬', name: 'Капуста рання',  period: '10–28 лютого', tip: 'Рання капуста, 60–70 днів до висадки' },
-      { icon: '🌿', name: 'Базилік',        period: '15–28 лютого', tip: 'Ніжна рослина, тримати у теплі' },
-    ]},
-  { name: 'Березень', subtitle: 'Перші посіви · Пробудження', short: 'Бер',
-    crops: [
-      { icon: '🍅', name: 'Томати',        period: '1–20 березня',  tip: 'Оптимальний час для розсади — 55–65 днів до висадки' },
-      { icon: '🥒', name: 'Огірки',        period: '20–31 березня', tip: 'Сіяти не раніш ніж за 25–30 днів до висадки' },
-      { icon: '🧅', name: 'Цибуля',        period: '1–15 березня',  tip: 'В теплиці або підвіконні' },
-      { icon: '🥕', name: 'Морква',        period: '15–31 березня', tip: 'Під плівку в захищений ґрунт' },
-    ]},
-  { name: 'Квітень', subtitle: 'Весняні роботи · Відкритий ґрунт', short: 'Квіт',
-    crops: [
-      { icon: '🥔', name: 'Картопля', period: '15–30 квітня', tip: 'Коли ґрунт прогрівся до +8°C' },
-      { icon: '🥗', name: 'Салат',    period: '1–20 квітня',  tip: 'Прямо у ґрунт або теплицю' },
-      { icon: '🌱', name: 'Редис',    period: '1–30 квітня',  tip: 'Швидко росте, 20–25 днів до врожаю' },
-      { icon: '🧄', name: 'Часник',   period: '5–20 квітня',  tip: 'Ярий часник садити у першій половині' },
-    ]},
-  { name: 'Травень', subtitle: 'Активний сезон · Висаджування', short: 'Тра',
-    crops: [
-      { icon: '🍅', name: 'Томати (висадка)', period: '10–31 травня', tip: 'Висаджувати після 15 травня, коли минає загроза заморозків' },
-      { icon: '🥒', name: 'Огірки (висадка)', period: '15–31 травня', tip: 'Ґрунт не холодніше +15°C' },
-      { icon: '🌽', name: 'Кукурудза',        period: '1–15 травня',  tip: 'Прямий посів у відкритий ґрунт' },
-      { icon: '🫘', name: 'Квасоля',          period: '15–31 травня', tip: 'Після останніх заморозків, у теплий ґрунт' },
-    ]},
-  { name: 'Червень', subtitle: 'Догляд · Перші плоди', short: 'Чер',
-    crops: [
-      { icon: '🥒', name: 'Огірки 2-й строк',  period: '1–10 червня',  tip: 'Для осіннього врожаю' },
-      { icon: '🥬', name: 'Капуста пізня',      period: '1–15 червня',  tip: 'Висадка розсади у відкритий ґрунт' },
-      { icon: '🌿', name: 'Кріп, петрушка',     period: 'весь місяць',  tip: 'Можна сіяти кожні 2–3 тижні' },
-      { icon: '🌸', name: 'Квіти однорічні',    period: '1–20 червня',  tip: 'Чорнобривці, айстри, флокси' },
-    ]},
-  { name: 'Липень', subtitle: 'Збір врожаю · Полив', short: 'Лип',
-    crops: [
-      { icon: '🥕', name: 'Морква (осіння)', period: '1–20 липня',  tip: 'Для зберігання взимку' },
-      { icon: '🥬', name: 'Редька зимова',   period: '15–31 липня', tip: 'Чорна редька, дайкон' },
-      { icon: '🌿', name: 'Зелень',          period: 'весь місяць', tip: 'Шпинат, кріп, руккола — сіяти під вечір' },
-      { icon: '🧅', name: 'Цибуля озима',    period: '25–31 липня', tip: 'Підготовка ділянки для озимої цибулі' },
-    ]},
-  { name: 'Серпень', subtitle: 'Осінній посів · Заготовки', short: 'Сер',
-    crops: [
-      { icon: '🥬', name: 'Шпинат, руккола',     period: '1–20 серпня',  tip: 'Осінній урожай зелені' },
-      { icon: '🧄', name: 'Часник (озимий)',      period: '20–31 серпня', tip: 'Підготовка ділянки, посадка у вересні' },
-      { icon: '🌷', name: 'Цибулини тюльпанів',  period: '25–31 серпня', tip: 'Купувати і зберігати до посадки' },
-      { icon: '🌿', name: 'Сидерати',            period: 'весь місяць',  tip: 'Гірчиця, фацелія для покращення ґрунту' },
-    ]},
-  { name: 'Вересень', subtitle: 'Посів озимих · Збір', short: 'Вер',
-    crops: [
-      { icon: '🧄', name: 'Часник (озимий)',    period: '15–30 вересня', tip: 'Садити за 4–6 тижнів до заморозків' },
-      { icon: '🌷', name: 'Цибулини квіток',    period: '1–20 вересня',  tip: 'Тюльпани, нарциси, крокуси' },
-      { icon: '🌿', name: 'Сидерати',          period: '1–15 вересня',  tip: 'Жито, озима пшениця для захисту ґрунту' },
-      { icon: '🥬', name: 'Шпинат',            period: '1–10 вересня',  tip: 'Встигне зійти до холодів' },
-    ]},
-  { name: 'Жовтень', subtitle: 'Підготовка до зими · Цибулини', short: 'Жов',
-    crops: [
-      { icon: '🧅', name: 'Цибуля (підзимня)', period: '1–20 жовтня',  tip: 'Дрібна цибуля-сівок для раннього врожаю' },
-      { icon: '🌷', name: 'Посадка цибулин',   period: '1–15 жовтня',  tip: 'Тюльпани, нарциси, гіацинти' },
-      { icon: '🥕', name: 'Морква (підзимня)', period: '20–31 жовтня', tip: 'Сухе насіння в промерзлий ґрунт' },
-      { icon: '🌳', name: 'Дерева та кущі',    period: 'весь місяць',  tip: 'Посадка плодових саджанців' },
-    ]},
-  { name: 'Листопад', subtitle: 'Ревізія запасів · Планування', short: 'Лис',
-    crops: [
-      { icon: '📋', name: 'Аналіз сезону',    period: 'весь місяць',     tip: 'Записати що вдалося, що треба змінити' },
-      { icon: '🌰', name: 'Стратифікація',    period: 'з 15 листопада',  tip: 'Насіння дерев потребує холодної обробки' },
-      { icon: '🌿', name: 'Вигонка цибулі',   period: '1–30 листопада',  tip: 'Для зелені у грудні-січні' },
-      { icon: '🪴', name: 'Кімнатні рослини', period: 'весь місяць',     tip: 'Перевірити полив та підсвітку' },
-    ]},
-  { name: 'Грудень', subtitle: 'Зимовий спокій · Аналіз сезону', short: 'Гру',
-    crops: [
-      { icon: '🫑', name: 'Перець (рання)',     period: '20–31 грудня', tip: 'Найранніший строк для тих, хто поспішає' },
-      { icon: '📚', name: 'Замовлення насіння', period: 'весь місяць',  tip: 'Кращий час для вибору та замовлення нових сортів' },
-      { icon: '🌿', name: 'Вигонка зелені',     period: 'весь місяць',  tip: 'Цибуля, петрушка у горщиках на підвіконні' },
-      { icon: '🎁', name: 'Подарункові набори', period: 'до 25 грудня', tip: 'Насіння як подарунок для садівників' },
-    ]},
+  { name:'Січень',    sub:'Планування · Замовлення насіння', crops:[
+    {e:'🫑', n:'Перець',       p:'15–31 січня',  t:'Сіяти розсаду вдома. Тримати при 24–26°C. Потрібна підсвітка.'},
+    {e:'🍅', n:'Ранні томати', p:'20–31 січня',  t:'Тільки якщо є досвід та хороша підсвітка. Не поспішайте.'},
+    {e:'🌿', n:'Селера',       p:'10–25 січня',  t:'Дуже дрібне насіння, не присипати землею. 60–90 днів до висадки.'},
+    {e:'📋', n:'Планування',   p:'весь місяць',  t:'Замовляйте насіння, читайте каталоги, плануйте грядки.'},
+  ]},
+  { name:'Лютий',    sub:'Перша розсада · Підготовка', crops:[
+    {e:'🫑', n:'Перець',        p:'1–15 лютого',  t:'Підсвітка обов\'язкова — 16 годин на день. Тепло не нижче +22°C.'},
+    {e:'🍆', n:'Баклажан',      p:'5–20 лютого',  t:'Сіяти раніше за томати — росте повільніше.'},
+    {e:'🥬', n:'Капуста рання', p:'10–28 лютого', t:'60–70 днів до висадки у відкритий ґрунт.'},
+    {e:'🌿', n:'Базилік',       p:'15–28 лютого', t:'Теплолюбна рослина, не виносить протягів.'},
+  ]},
+  { name:'Березень', sub:'Перші посіви · Пробудження', crops:[
+    {e:'🍅', n:'Томати',  p:'1–20 березня',  t:'55–65 днів до висадки. Не поливайте надмір.'},
+    {e:'🥒', n:'Огірки',  p:'20–31 березня', t:'Сіяти не раніш ніж за 25–30 днів до висадки.'},
+    {e:'🧅', n:'Цибуля',  p:'1–15 березня',  t:'Можна у теплиці або на підвіконні.'},
+    {e:'🥕', n:'Морква',  p:'15–31 березня', t:'Сіяти під плівку в захищений ґрунт.'},
+  ]},
+  { name:'Квітень',  sub:'Весняні роботи · Відкритий ґрунт', crops:[
+    {e:'🥔', n:'Картопля', p:'15–30 квітня', t:'Коли ґрунт прогрівся до +8°C на глибині 10 см.'},
+    {e:'🥗', n:'Салат',    p:'1–20 квітня',  t:'Прямо у ґрунт або теплицю. Дуже проста культура.'},
+    {e:'🌱', n:'Редис',    p:'1–30 квітня',  t:'Готовий за 20–25 днів. Сіяти кожні 2 тижні для постійного врожаю.'},
+    {e:'🧄', n:'Часник',   p:'5–20 квітня',  t:'Ярий часник — садити у першій половині квітня.'},
+  ]},
+  { name:'Травень',  sub:'Активний сезон · Висаджування', crops:[
+    {e:'🍅', n:'Томати (висадка)', p:'15–31 травня', t:'Висаджувати після 15 травня — загроза заморозків минула.'},
+    {e:'🥒', n:'Огірки (висадка)', p:'15–31 травня', t:'Ґрунт не холодніше +15°C. Поливати теплою водою.'},
+    {e:'🌽', n:'Кукурудза',        p:'1–15 травня',  t:'Прямий посів у відкритий ґрунт.'},
+    {e:'🫘', n:'Квасоля',          p:'15–31 травня', t:'Після останніх заморозків, у теплий ґрунт.'},
+  ]},
+  { name:'Червень',  sub:'Догляд · Перші плоди', crops:[
+    {e:'🥒', n:'Огірки 2-й посів',  p:'1–10 червня',  t:'Для осіннього врожаю.'},
+    {e:'🥬', n:'Капуста пізня',     p:'1–15 червня',  t:'Висадка розсади у відкритий ґрунт.'},
+    {e:'🌿', n:'Кріп і петрушка',   p:'весь місяць',  t:'Сіяти кожні 2–3 тижні для постійної зелені.'},
+    {e:'🌸', n:'Квіти однорічні',   p:'1–20 червня',  t:'Чорнобривці, айстри, флокси.'},
+  ]},
+  { name:'Липень',   sub:'Збір врожаю · Полив', crops:[
+    {e:'🥕', n:'Морква (осіння)', p:'1–20 липня',  t:'Для зберігання взимку. Сіяти на добре зволожений ґрунт.'},
+    {e:'🥬', n:'Редька зимова',   p:'15–31 липня', t:'Чорна редька, дайкон — для осіннього вживання.'},
+    {e:'🌿', n:'Зелень',          p:'весь місяць', t:'Шпинат, кріп, руккола — сіяти ввечері у спеку.'},
+    {e:'🧅', n:'Цибуля озима',    p:'25–31 липня', t:'Підготовка ділянки для осінньої посадки.'},
+  ]},
+  { name:'Серпень',  sub:'Осінній посів · Заготовки', crops:[
+    {e:'🥬', n:'Шпинат і руккола',    p:'1–20 серпня',  t:'Осінній урожай зелені — смачний і корисний.'},
+    {e:'🧄', n:'Часник озимий',       p:'20–31 серпня', t:'Підготовка ділянки. Посадка — у вересні.'},
+    {e:'🌷', n:'Цибулини тюльпанів',  p:'25–31 серпня', t:'Купити та зберігати у сухому місці до посадки.'},
+    {e:'🌿', n:'Сидерати',            p:'весь місяць',  t:'Гірчиця, фацелія — покращують ґрунт.'},
+  ]},
+  { name:'Вересень', sub:'Посів озимих · Збір', crops:[
+    {e:'🧄', n:'Часник озимий',   p:'15–30 вересня', t:'Садити за 4–6 тижнів до морозів. Глибина 5–7 см.'},
+    {e:'🌷', n:'Цибулини квіток', p:'1–20 вересня',  t:'Тюльпани, нарциси, крокуси.'},
+    {e:'🌿', n:'Сидерати',        p:'1–15 вересня',  t:'Жито, озима пшениця — захист ґрунту взимку.'},
+    {e:'🥬', n:'Шпинат',          p:'1–10 вересня',  t:'Встигне зійти до холодів.'},
+  ]},
+  { name:'Жовтень',  sub:'Підготовка до зими · Цибулини', crops:[
+    {e:'🧅', n:'Цибуля підзимня',  p:'1–20 жовтня',  t:'Дрібна цибуля-сівок — для раннього врожаю навесні.'},
+    {e:'🌷', n:'Цибулини квіток',  p:'1–15 жовтня',  t:'Тюльпани, нарциси, гіацинти — до заморозків.'},
+    {e:'🥕', n:'Морква підзимня',  p:'20–31 жовтня', t:'Сухе насіння у вже промерзлий ґрунт.'},
+    {e:'🌳', n:'Дерева і кущі',    p:'весь місяць',  t:'Гарний час для посадки плодових саджанців.'},
+  ]},
+  { name:'Листопад', sub:'Ревізія запасів · Планування', crops:[
+    {e:'📋', n:'Аналіз сезону',    p:'весь місяць',    t:'Запишіть що вдалося, що ні — для наступного року.'},
+    {e:'🌰', n:'Стратифікація',    p:'з 15 листопада', t:'Насіння дерев потребує холодної обробки перед посівом.'},
+    {e:'🌿', n:'Вигонка цибулі',   p:'1–30 листопада', t:'Посадіть цибулю у горщик — свіжа зелень у грудні.'},
+    {e:'🪴', n:'Кімнатні рослини', p:'весь місяць',    t:'Скоротити полив, додати підсвітку.'},
+  ]},
+  { name:'Грудень',  sub:'Зимовий спокій · Аналіз', crops:[
+    {e:'🫑', n:'Перець (ранній)',    p:'20–31 грудня', t:'Найранніший строк — тільки при хорошій підсвітці.'},
+    {e:'📚', n:'Замовлення насіння', p:'весь місяць',  t:'Найкращий час переглянути каталоги і замовити насіння.'},
+    {e:'🌿', n:'Вигонка зелені',     p:'весь місяць',  t:'Цибуля і петрушка у горщиках дадуть свіжу зелень.'},
+    {e:'🎁', n:'Подарунок садівнику',p:'до 25 грудня', t:'Набір насіння — чудовий подарунок для городника.'},
+  ]},
 ];
 
-const DAY_LABELS   = { 0: '',          1: 'добре',    2: 'відмінно', 3: 'не садити' };
-const DAY_CLASSES  = { 0: '',          1: 'good',     2: 'best',     3: 'avoid' };
-const MOON_DESC    = {
-  '🌑': 'Новий місяць',      '🌒': 'Молодий місяць',   '🌓': 'Перша чверть',
-  '🌔': 'Прибуваючий місяць','🌕': 'Повний місяць',     '🌖': 'Спадаючий місяць',
-  '🌗': 'Остання чверть',    '🌘': 'Старий місяць'
+const TYPE_STATUS = {
+  0: { text:'Нейтральний день',  cls:'ds-neut'  },
+  1: { text:'✅ Добрий день',     cls:'ds-good'  },
+  2: { text:'🌟 Чудовий день!',   cls:'ds-best'  },
+  3: { text:'❌ Не садити',       cls:'ds-avoid' },
 };
 const TYPE_DESC = {
-  0: 'Нейтральний день. Можна проводити поточні роботи у саду.',
-  1: 'Сприятливий день для посіву та пересадки.',
-  2: 'Найкращий день — садіть, сійте, пересаджуйте! Місяць сприяє росту.',
-  3: 'Небажано садити. Краще зайнятися прополюванням, поливом або відпочинком.'
+  0: 'Можна займатися поточними справами: полив, прополка, розпушування.',
+  1: 'Сприятливий день для посіву та пересадки рослин.',
+  2: 'Найкращий день! Садіть, сійте, пересаджуйте — все прийметься добре.',
+  3: 'Небажано садити і пересаджувати. Краще полити, прополоти або відпочити.',
 };
+const MOON_DESC = {
+  '🌑':'Новий місяць','🌒':'Молодий місяць','🌓':'Перша чверть',
+  '🌔':'Зростаючий','🌕':'Повний місяць','🌖':'Спадаючий',
+  '🌗':'Остання чверть','🌘':'Старий місяць',
+};
+const DAY_STATUS_SHORT = { 0:'', 1:'добре', 2:'чудово', 3:'ні' };
+const DAY_CLASS = { 0:'', 1:'good', 2:'best', 3:'avoid' };
 
-// ─────────────────────────────────────────────────────────
-//  РЕНДЕР
-// ─────────────────────────────────────────────────────────
 const YEAR = 2026;
 const TODAY = new Date();
 let currentMonth = TODAY.getMonth();
+let selectedDay = null;
 
-function getDaysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
+function getDaysInMonth(y, m) { return new Date(y, m+1, 0).getDate(); }
 function getFirstDay(y, m) {
   const d = new Date(y, m, 1).getDay();
-  return d === 0 ? 6 : d - 1; // Пн=0
+  return d === 0 ? 6 : d - 1;
 }
 
-function renderCalendar(month) {
+function renderCalendar() {
+  const month = currentMonth;
+  const data = MONTHS[month];
+  document.getElementById('monthName').textContent = data.name;
+  document.getElementById('monthSub').textContent  = data.sub;
+
   const daysInMonth = getDaysInMonth(YEAR, month);
   const firstDay    = getFirstDay(YEAR, month);
   const grid = document.getElementById('daysGrid');
@@ -759,92 +606,121 @@ function renderCalendar(month) {
 
   for (let i = 0; i < firstDay; i++) {
     const e = document.createElement('div');
-    e.className = 'day-cell empty';
+    e.className = 'day empty';
     grid.appendChild(e);
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
-    const date = new Date(YEAR, month, d, 12, 0, 0); // полудень UTC+2 ≈ 10:00 UTC
+    const date = new Date(YEAR, month, d, 12, 0, 0);
     const moon  = getMoonEmoji(date);
+    const zIdx  = getMoonZodiacIndex(date);
+    const zodiac = ZODIAC[zIdx];
     const type  = getDayType(date);
-    const age   = Math.round(getMoonAge(date));
-    const zodIdx = getMoonZodiacIndex(date);
-    const zodiac = ZODIAC_SIGNS[zodIdx];
+    const cls   = DAY_CLASS[type];
+    const isToday = (TODAY.getFullYear() === YEAR && TODAY.getMonth() === month && TODAY.getDate() === d);
 
     const cell = document.createElement('div');
-    cell.className = 'day-cell' + (DAY_CLASSES[type] ? ' ' + DAY_CLASSES[type] : '');
-    const isToday = (TODAY.getFullYear() === YEAR && TODAY.getMonth() === month && TODAY.getDate() === d);
-    if (isToday) cell.classList.add('today');
+    cell.className = 'day' + (cls ? ' ' + cls : '') + (isToday ? ' today' : '');
 
-    // Маленька крапка елементу зодіаку
-    const elemColor = ELEMENT_COLORS[zodiac.element];
+    const statusText = DAY_STATUS_SHORT[type];
     cell.innerHTML = `
       <span class="day-num">${d}</span>
-      <span class="day-moon">${moon}</span>
-      <span class="day-zodiac" style="color:${elemColor}" title="${zodiac.name}">${zodiac.emoji}</span>
-      ${type ? `<span class="day-label">${DAY_LABELS[type]}</span>` : ''}
+      <div class="day-icons"><span>${moon}</span><span style="color:${elemColor(zodiac.element)}">${zodiac.emoji}</span></div>
+      ${statusText ? `<span class="day-status">${statusText}</span>` : ''}
     `;
 
-    cell.addEventListener('mouseenter', e => showTooltip(e, d, type, moon, month, age, zodiac));
-    cell.addEventListener('mouseleave', hideTooltip);
-    cell.addEventListener('mousemove',  moveTooltip);
+    cell.addEventListener('click', () => showDetail(d, date, type, moon, zodiac));
     grid.appendChild(cell);
   }
 
-  document.getElementById('monthTitle').textContent    = MONTHS[month].name;
-  document.getElementById('monthSubtitle').textContent = MONTHS[month].subtitle;
-  document.getElementById('cropsTitle').textContent    = `Що садити у ${MONTHS[month].name.toLowerCase()}`;
+  // render crops
+  renderCrops();
 
-  const cropsGrid = document.getElementById('cropsGrid');
-  cropsGrid.innerHTML = '';
-  MONTHS[month].crops.forEach(c => {
+  // close detail on month change
+  closeDetail();
+}
+
+function elemColor(el) {
+  return { fire:'#E65100', earth:'#558B2F', air:'#1565C0', water:'#006064' }[el];
+}
+
+function showDetail(day, date, type, moon, zodiac) {
+  selectedDay = day;
+  const month = currentMonth;
+  const mName = MONTHS[month].name;
+  const age   = Math.round(getMoonAge(date));
+
+  document.getElementById('detailDate').textContent = `${day} ${mName} 2026`;
+  const st = TYPE_STATUS[type];
+  const statusEl = document.getElementById('detailStatus');
+  statusEl.textContent = st.text;
+  statusEl.className = 'detail-status ' + st.cls;
+
+  const body = document.getElementById('detailBody');
+  body.innerHTML = '';
+
+  // Moon row
+  body.appendChild(makeRow('🌙', `${MOON_DESC[moon]} · ${age}-й день місяця`, TYPE_DESC[type]));
+
+  // Zodiac row
+  const elemName = ELEM_LABEL[zodiac.element];
+  body.appendChild(makeRow(
+    zodiac.emoji,
+    `Місяць у ${zodiac.name} · ${elemName}`,
+    `✅ Добре: ${zodiac.good}\n❌ Обережно: ${zodiac.bad}`
+  ));
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('visible');
+  // Scroll panel into view smoothly
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function makeRow(icon, title, text) {
+  const row = document.createElement('div');
+  row.className = 'detail-row';
+  row.innerHTML = `
+    <div class="detail-row-icon">${icon}</div>
+    <div class="detail-row-content">
+      <div class="detail-row-title">${title}</div>
+      <div class="detail-row-text">${text.replace(/\n/g,'<br>')}</div>
+    </div>
+  `;
+  return row;
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('visible');
+  selectedDay = null;
+}
+
+function renderCrops() {
+  const crops = MONTHS[currentMonth].crops;
+  document.getElementById('cropsTitle').textContent = `🌾 Що садити у ${MONTHS[currentMonth].name.toLowerCase()}`;
+  const list = document.getElementById('cropsList');
+  list.innerHTML = '';
+  crops.forEach(c => {
     const card = document.createElement('div');
     card.className = 'crop-card';
-    card.innerHTML = `<div class="crop-icon">${c.icon}</div><div class="crop-name">${c.name}</div><div class="crop-period">📅 ${c.period}</div><div class="crop-tip">${c.tip}</div>`;
-    cropsGrid.appendChild(card);
+    card.innerHTML = `
+      <div class="crop-emoji">${c.e}</div>
+      <div class="crop-info">
+        <div class="crop-name">${c.n}</div>
+        <div class="crop-period">📅 ${c.p}</div>
+        <div class="crop-tip">${c.t}</div>
+      </div>
+    `;
+    list.appendChild(card);
   });
 }
 
-function showTooltip(e, day, type, moon, month, age, zodiac) {
-  const tt = document.getElementById('tooltip');
-  const elemName = { fire: 'Вогонь 🔥', earth: 'Земля 🌍', air: 'Повітря 💨', water: 'Вода 💧' };
-  document.getElementById('ttTitle').textContent = `${day} ${MONTHS[month].name} — ${MOON_DESC[moon] || ''}`;
-  document.getElementById('ttMoon').textContent  = `Вік місяця: ${age}-й день`;
-  document.getElementById('ttZodiac').innerHTML  = `<span style="color:${ELEMENT_COLORS[zodiac.element]}">${zodiac.emoji} ${zodiac.name}</span> · ${elemName[zodiac.element]}`;
-  document.getElementById('ttZodiacTip').textContent = zodiac.tip;
-  document.getElementById('ttInfo').textContent  = TYPE_DESC[type];
-  tt.style.display = 'block';
-  moveTooltip(e);
-}
-function moveTooltip(e) {
-  const tt = document.getElementById('tooltip');
-  let x = e.clientX + 16, y = e.clientY - 40;
-  if (x + 210 > window.innerWidth) x = e.clientX - 220;
-  if (y < 0) y = e.clientY + 20;
-  tt.style.left = x + 'px';
-  tt.style.top  = y + 'px';
-}
-function hideTooltip() {
-  document.getElementById('tooltip').style.display = 'none';
+function changeMonth(dir) {
+  currentMonth = (currentMonth + dir + 12) % 12;
+  renderCalendar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Навігація місяців
-const nav = document.getElementById('monthNav');
-MONTHS.forEach((m, i) => {
-  const btn = document.createElement('button');
-  btn.className = 'month-btn' + (i === currentMonth ? ' active' : '');
-  btn.textContent = m.short;
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentMonth = i;
-    renderCalendar(i);
-    document.querySelector('.calendar-container').scrollIntoView({ behavior: 'smooth' });
-  });
-  nav.appendChild(btn);
-});
-
-renderCalendar(currentMonth);
+renderCalendar();
 </script>
 </body>
 </html>
